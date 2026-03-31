@@ -1,8 +1,7 @@
 {
   "name": "charcycle",
   "version": "1.0.0",
-  "description": "React component to create a character cycling effect on text",
-  "main": "src/index.js",
+  "description": "React component to create a character cycling / text scramble effect",
   "author": "Robin Willis",
   "license": "MIT",
   "homepage": "https://robincwillis.github.io/CharCycle/",
@@ -17,14 +16,36 @@
     "text",
     "cycling",
     "glitch",
-    "scramble"
+    "scramble",
+    "typewriter"
   ],
+  "main": "dist/charcycle.cjs.js",
+  "module": "dist/charcycle.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/charcycle.es.js",
+      "require": "./dist/charcycle.cjs.js"
+    },
+    "./css": "./css/charCycle.css"
+  },
+  "files": [
+    "dist",
+    "css",
+    "src"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "vite build",
+    "prepublishOnly": "npm run build"
+  },
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "vite": "^5.0.0"
   }
 }

@@ -32,7 +32,7 @@ Or copy `src/CharCycle.jsx` directly into your project.
 ### Usage
 
 ```jsx
-import CharCycle from 'charcycle';
+import { CharCycle } from 'charcycle';
 
 // Hover to trigger (default)
 <CharCycle text="Lorem ipsum dolor sit amet" />
@@ -46,6 +46,8 @@ import CharCycle from 'charcycle';
 // Custom speed
 <CharCycle text="Fast reveal" trigger="auto" speed={2} />
 ```
+
+> **Named export only** — there is no default export. Always use `import { CharCycle } from 'charcycle'`.
 
 ---
 

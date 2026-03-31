@@ -1,0 +1,10 @@
+# Demo / project pages
+index.html
+example/
+
+# Build tooling
+vite.config.js
+.gitignore
+
+# Legacy jQuery source
+src/jquery.charCycle.0.0.1.js
