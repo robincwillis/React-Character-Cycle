@@ -1,35 +1,52 @@
-	@font-face {
-	    font-family: 'Silkscreen-Expanded';
-	    src: url('fonts/slkscre.eot');
-	    src: url('fonts/slkscre.eot?#iefix') format('embedded-opentype'),
-	         url('fonts/slkscre.woff') format('woff'),
-	         url('fonts/slkscre.ttf') format('truetype'),
-	         url('fonts/slkscre.svg#slkscre') format('svg');
-	    font-weight: normal;
-	    font-style: normal;
-	}
-	body{
-		padding:40px;
-		font-family: 'Silkscreen-Expanded';
-		font-size:8px;
-	}
-	.c{
-		margin:10px;
-		padding:5px;
-		background:#F8F8FF;
-	}
-	a{
-		color:#000;
-		text-decoration: none;
-	}
-	ul,li{
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
-	h1,h2,h3{
-		font-weight: normal;
-	}
-	h3{
-		font-size:8px;
-	}
+@font-face {
+    font-family: 'Silkscreen-Expanded';
+    src: url('fonts/slkscre.eot');
+    src: url('fonts/slkscre.eot?#iefix') format('embedded-opentype'),
+         url('fonts/slkscre.woff') format('woff'),
+         url('fonts/slkscre.ttf') format('truetype'),
+         url('fonts/slkscre.svg#slkscre') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    padding: 40px;
+    font-family: 'Silkscreen-Expanded';
+    font-size: 8px;
+}
+
+/* Container for each CharCycle instance */
+.c {
+    margin: 10px;
+    padding: 5px;
+    background: #F8F8FF;
+}
+
+/* CharCycle component root element */
+.charcycle {
+    cursor: default;
+}
+
+/* Pointer cursor when click-triggered */
+.charcycle.click-trigger {
+    cursor: pointer;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+ul, li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+h1, h2, h3 {
+    font-weight: normal;
+}
+
+h3 {
+    font-size: 8px;
+}

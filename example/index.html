@@ -1,63 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-
-  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
-       Remove this if you use the .htaccess -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CharCycle React component - character cycling effect demo">
+  <meta name="author" content="Robin Willis">
   <title>CharCycle Example</title>
-  <meta name="description" content="jQuery pluging for character cycling effect" />
-  <meta name="author" content="Robin Willis" />
-  
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-  <script type="text/javascript" src="../src/jquery.charCycle.0.0.1.js"></script>
-  <link rel="stylesheet" href="css/charcycle.css" type="text/css">  
 
-  <script type="text/javascript">
-  $(document).ready(function(){
-  	  	
-  	$('.c').mouseenter(function(){
-  		
-  		if($(this).hasClass('cycling')==false){
-			  		
-			  		$(this).charcycle({'target':'#text'});	
-		}
-  	});
-  });
-  	
-  </script>
-  
-  <style type="text/css">
-    body{
-      background-color:#FFFFFF;
-    }
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <link rel="stylesheet" href="../css/charCycle.css">
+
+  <style>
+    body { background-color: #fff; }
   </style>
-  
-  
 </head>
 
 <body>
+  <div id="root"></div>
 
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
 
-   
-    	<h3>Using Divs</h3>
-    	<div class="c"><a href="#" id="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit</a></div> 
-    	<div class="c"><a href="#" id="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit</a></div>  
-    	<h3>Using a List</h3>
-    <ul>
-    	<li class="c"><a href="#" id="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit</a></li>
-    	<li class="c"><a href="#" id="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit</a></li>	
-    </ul>
-    
-    
- 
+    /* ── CharCycle component ───────────────────────────────────────── */
+    const QUOTE_PIC  = "....fgh......_____----hr--~`;'--~/--- ---asd----10?`, ";
+    const QUOTE_PIC2 = "..-_-10?`,abcdefghijklmnopqrstuvwxyz123456789080-~`;' ";
+    const QUOTE_PIC3 = "......................................................";
 
-    <footer>
-     <p>by Robin Willis</p>
-    </footer>
+    function CharCycle({ text = '', speed = 5, trigger = 'hover', className }) {
+      const [displayText, setDisplayText] = useState(text);
+      const [cycling, setCycling]         = useState(false);
+      const timerRef  = useRef(null);
+      const activeRef = useRef(false);
 
+      useEffect(() => {
+        if (!activeRef.current) setDisplayText(text);
+      }, [text]);
+
+      useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
+
+      const startCycle = useCallback(() => {
+        if (activeRef.current) return;
+        activeRef.current = true;
+        setCycling(true);
+
+        const quoteLen = text.length;
+        let quoteMax   = text.length;
+        const rndRange = QUOTE_PIC.length;
+        let quoteLoc   = 0;
+        let curSpeed   = speed;
+        let quoteStr   = text;
+        while (quoteStr.length < quoteMax) quoteStr += ' ';
+
+        function disQuote() {
+          let quoteDis = quoteStr.substring(0, quoteLoc);
+          for (let i = quoteLoc; i < quoteMax; i++) {
+            const rdnum = Math.floor(Math.random() * rndRange);
+            if (i < quoteMax && i > quoteMax - 3) {
+              quoteDis += QUOTE_PIC3.substring(rdnum, rdnum + 1);
+            } else if (i > quoteLoc + 7 && i < quoteLoc + 14) {
+              quoteDis += QUOTE_PIC.substring(rdnum, rdnum + 1);
+            } else {
+              quoteDis += QUOTE_PIC2.substring(rdnum, rdnum + 1);
+            }
+          }
+          quoteLoc += 1;
+          if (quoteLoc === quoteLen + 2) {
+            activeRef.current = false;
+            setCycling(false);
+          }
+          return quoteDis;
+        }
+
+        function loopQuote() {
+          setDisplayText(disQuote());
+          if (activeRef.current) {
+            timerRef.current = setTimeout(loopQuote, curSpeed);
+            curSpeed += 0.75;
+          }
+          if (quoteMax < quoteLen) quoteMax += 3;
+        }
+
+        loopQuote();
+      }, [text, speed]);
+
+      useEffect(() => { if (trigger === 'auto') startCycle(); }, []); // eslint-disable-line
+
+      const handlers = {};
+      if (trigger === 'hover') handlers.onMouseEnter = startCycle;
+      else if (trigger === 'click') handlers.onClick = startCycle;
+
+      const classes = ['charcycle', cycling ? 'cycling' : '', className || '']
+        .filter(Boolean).join(' ');
+
+      return <span className={classes} {...handlers}>{displayText}</span>;
+    }
+    /* ─────────────────────────────────────────────────────────────── */
+
+    const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit';
+
+    function App() {
+      return (
+        <div>
+          <h3>Hover trigger (default)</h3>
+          <div className="c"><CharCycle text={LOREM} /></div>
+          <div className="c"><CharCycle text={LOREM} /></div>
+
+          <h3>Click trigger</h3>
+          <div className="c"><CharCycle text={LOREM} trigger="click" className="click-trigger" /></div>
+
+          <h3>Auto trigger (plays on mount)</h3>
+          <div className="c"><CharCycle text={LOREM} trigger="auto" /></div>
+
+          <h3>Using a list</h3>
+          <ul>
+            <li className="c"><CharCycle text={LOREM} /></li>
+            <li className="c"><CharCycle text={LOREM} /></li>
+          </ul>
+
+          <footer>
+            <p>by Robin Willis</p>
+          </footer>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
 </body>
 </html>
-html>
