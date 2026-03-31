@@ -1,131 +1,211 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>CharCycle, an Effect JQuery Plugin</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-    <script src="js/jquery.charCycle.0.0.1.js"></script>
-    
-    <link rel="stylesheet" type="text/css" href="css/charcycle.css"></link>
-        
-    <script type="text/javascript">
-      $(document).ready(function(){     
-        $('.c').mouseenter(function(){
-          if($(this).hasClass('cycling')==false){ 
-              $(this).charcycle({'target':'#text'});  
-          }
-        });
-    });
-    </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CharCycle - React Component</title>
 
-    <script type="text/javascript">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-4803873-2']);
-      _gaq.push(['_setDomainName', '.robincwillis.com']);
-      _gaq.push(['_trackPageview','/CharCycle']);
+  <link rel="stylesheet" href="css/charCycle.css">
 
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-
-
-  </head>
-      
-  <body>
-
-
-    <div id="container">
-
-    
-  
-    <h1>CharCycle</h1>
-    <h2>A JQuery plugin to create a cycling effect on selected text at some event.</h2>
-    <div id="content">
-       <div id="header">
-    <!-- Demo Header -->  
-    <div id="demo_cycle">
-     
-      <div class="c"><a href="#" id="text">Lorem ipsum dolor sit amet, consectetur adipisicing elit</a></div> 
-      <div class="c"><a href="#" id="text">sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</a></div>  
-      <div class="c"><a href="#" id="text">Ut enim ad minim veniam</a></div> 
-      <div class="c"><a href="#" id="text">quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat</a></div>  
-    
-    </div>
-    
-  
-    
-    </div>
-    
-     
-    <!-- Description -->
-    <div id="description">
-    
-    <h3>Description</h3>
-
-
-    
-    <p>
-This effect is inspired by the classic actionscript effect on <a href="http://www.yugop.com">yugop.com</a>. Attach the plugin to the element you want to trigger the cycling, specify the target text you want to produce the effect and include a conditional statement to ensure that cycling isn’t re-triggered while the effect is in progress.
-    </p>  
-
-<h3>Options</h3>
-<ul>
-<li><b>speed</b>: time it takes per cycle, default is set to 5</li>
-
-</ul>
-    </div>
-    </div>
-    <div id="menu">
-    Version Beta 0.0.1<br/>
-    
-    Updated November 10th, 2011<br/>
-    
-    Have questions or find a bug? Open an Issue on <a href="https://github.com/robincwillis/CharCycle/issues" target="_blank">GitHub</a><br/>
-    
-    
-    
-    
-    <a class="button" href="src/jquery.charCycle.0.0.1.js" target="_blank">Download</a> 
-    <!-- Download Link -->
-    <a class="button" href="example/index.html" target="_blank">Demo</a>
-    <!-- Demo Link -->
-    <a class="button" href="https://github.com/robincwillis/CharCycle" target="_blank">Source</a> 
-    <!-- Contact Link -->
-    
-    
-    </div>
-    <div style="clear:both"></div>
-    <!-- Pre-HTML -->
-    <div id="code_html">
-    <h2>HTML</h2>
-    <pre>
-  &lt;div class="c"&gt;&lt;a href="#" id="text"&gt;Lorem ipsum dolor sit amet, consectetur&lt;/a&gt;&lt;/div&gt;</pre>      
-    </div>
-    
-    <!-- Pre-Jquery -->
-    <div id="code_jquery">
-    <h2>JAVASCRIPT</h2>
-      <pre>
-  $('.c').mouseenter(function(){
-    if($(this).hasClass('cycling')==false){ 
-        $(this).charcycle({'target':'#text'});  
+  <style>
+    #container { max-width: 800px; }
+    #content   { float: left; width: 60%; }
+    #menu      { float: left; width: 35%; padding-left: 5%; }
+    #footer    { clear: both; margin-top: 20px; }
+    .button    {
+      display: inline-block;
+      margin: 4px 4px 4px 0;
+      padding: 4px 8px;
+      background: #F8F8FF;
+      color: #000;
+      text-decoration: none;
+      border: 1px solid #ccc;
     }
-  });</pre>
-    </div>
+    pre {
+      background: #F8F8FF;
+      padding: 10px;
+      overflow-x: auto;
+      font-family: monospace;
+      font-size: 11px;
+    }
+    #demo_cycle { margin-bottom: 20px; }
+  </style>
+</head>
 
+<body>
+  <div id="root"></div>
 
-    <div id="footer">
-      
-      Check out my other JQuery Plugins and Projects at <a href="http://code.robincwillis.com" target="_blank">code.robincwillis.com</a>
-      or get in touch with me on <a href="https://twitter.com/#!/robincwillis" target="_blank">Twitter</a>.
-    </div>
-    
-    </div>
-  </body>
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
+
+    /* ── CharCycle component ───────────────────────────────────────── */
+    const QUOTE_PIC  = "....fgh......_____----hr--~`;'--~/--- ---asd----10?`, ";
+    const QUOTE_PIC2 = "..-_-10?`,abcdefghijklmnopqrstuvwxyz123456789080-~`;' ";
+    const QUOTE_PIC3 = "......................................................";
+
+    function CharCycle({ text = '', speed = 5, trigger = 'hover', className }) {
+      const [displayText, setDisplayText] = useState(text);
+      const [cycling, setCycling]         = useState(false);
+      const timerRef  = useRef(null);
+      const activeRef = useRef(false);
+
+      useEffect(() => {
+        if (!activeRef.current) setDisplayText(text);
+      }, [text]);
+
+      useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
+
+      const startCycle = useCallback(() => {
+        if (activeRef.current) return;
+        activeRef.current = true;
+        setCycling(true);
+
+        const quoteLen = text.length;
+        let quoteMax   = text.length;
+        const rndRange = QUOTE_PIC.length;
+        let quoteLoc   = 0;
+        let curSpeed   = speed;
+        let quoteStr   = text;
+        while (quoteStr.length < quoteMax) quoteStr += ' ';
+
+        function disQuote() {
+          let quoteDis = quoteStr.substring(0, quoteLoc);
+          for (let i = quoteLoc; i < quoteMax; i++) {
+            const rdnum = Math.floor(Math.random() * rndRange);
+            if (i < quoteMax && i > quoteMax - 3) {
+              quoteDis += QUOTE_PIC3.substring(rdnum, rdnum + 1);
+            } else if (i > quoteLoc + 7 && i < quoteLoc + 14) {
+              quoteDis += QUOTE_PIC.substring(rdnum, rdnum + 1);
+            } else {
+              quoteDis += QUOTE_PIC2.substring(rdnum, rdnum + 1);
+            }
+          }
+          quoteLoc += 1;
+          if (quoteLoc === quoteLen + 2) {
+            activeRef.current = false;
+            setCycling(false);
+          }
+          return quoteDis;
+        }
+
+        function loopQuote() {
+          setDisplayText(disQuote());
+          if (activeRef.current) {
+            timerRef.current = setTimeout(loopQuote, curSpeed);
+            curSpeed += 0.75;
+          }
+          if (quoteMax < quoteLen) quoteMax += 3;
+        }
+
+        loopQuote();
+      }, [text, speed]);
+
+      useEffect(() => { if (trigger === 'auto') startCycle(); }, []); // eslint-disable-line
+
+      const handlers = {};
+      if (trigger === 'hover') handlers.onMouseEnter = startCycle;
+      else if (trigger === 'click') handlers.onClick = startCycle;
+
+      const classes = ['charcycle', cycling ? 'cycling' : '', className || '']
+        .filter(Boolean).join(' ');
+
+      return <span className={classes} {...handlers}>{displayText}</span>;
+    }
+    /* ─────────────────────────────────────────────────────────────── */
+
+    function App() {
+      const demos = [
+        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
+        'Ut enim ad minim veniam',
+        'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
+      ];
+
+      return (
+        <div id="container">
+          <h1>CharCycle</h1>
+          <h2>A React component to create a cycling effect on selected text at some event.</h2>
+
+          <div id="content">
+            <div id="header">
+              <div id="demo_cycle">
+                {demos.map((t, i) => (
+                  <div key={i} className="c">
+                    <CharCycle text={t} trigger="hover" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div id="description">
+              <h3>Description</h3>
+              <p>
+                This effect is inspired by the classic ActionScript effect on{' '}
+                <a href="http://www.yugop.com">yugop.com</a>. Hover over the
+                text blocks above to trigger the effect. The component prevents
+                re-triggering while an animation is in progress.
+              </p>
+
+              <h3>Props</h3>
+              <ul>
+                <li><b>text</b>: the string to animate (required)</li>
+                <li><b>speed</b>: initial ms per cycle, default <code>5</code></li>
+                <li><b>trigger</b>: <code>'hover'</code> | <code>'click'</code> | <code>'auto'</code>, default <code>'hover'</code></li>
+                <li><b>className</b>: additional CSS class(es)</li>
+              </ul>
+            </div>
+          </div>
+
+          <div id="menu">
+            Version 1.0.0<br />
+            Updated March 2026<br /><br />
+            Have questions or found a bug?{' '}
+            <a href="https://github.com/robincwillis/CharCycle/issues" target="_blank" rel="noreferrer">
+              Open an Issue on GitHub
+            </a><br /><br />
+            <a className="button" href="src/CharCycle.jsx" target="_blank">Download</a>
+            <a className="button" href="example/index.html" target="_blank">Demo</a>
+            <a className="button" href="https://github.com/robincwillis/CharCycle" target="_blank">Source</a>
+          </div>
+
+          <div style={{ clear: 'both' }} />
+
+          <div id="code_jsx">
+            <h2>JSX</h2>
+            <pre>{`import CharCycle from 'charcycle';
+
+<CharCycle text="Lorem ipsum dolor sit amet" />`}</pre>
+          </div>
+
+          <div id="code_click">
+            <h2>Click trigger</h2>
+            <pre>{`<CharCycle text="Click me" trigger="click" />`}</pre>
+          </div>
+
+          <div id="code_auto">
+            <h2>Auto trigger (plays on mount)</h2>
+            <pre>{`<CharCycle text="Hello world" trigger="auto" speed={3} />`}</pre>
+          </div>
+
+          <div id="footer">
+            Check out my other projects at{' '}
+            <a href="http://code.robincwillis.com" target="_blank" rel="noreferrer">
+              code.robincwillis.com
+            </a>{' '}
+            or find me on{' '}
+            <a href="https://twitter.com/robincwillis" target="_blank" rel="noreferrer">
+              Twitter
+            </a>.
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
 </html>

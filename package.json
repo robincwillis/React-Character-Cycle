@@ -1,13 +1,30 @@
 {
-  "name": "CharCycle",
-  "version": "0.0.1",
+  "name": "charcycle",
+  "version": "1.0.0",
+  "description": "React component to create a character cycling effect on text",
+  "main": "src/index.js",
   "author": "Robin Willis",
-  "description": "jQuery plugin to cycle through characters on an event",
-  "homepage": "http://www.robincwillis.com/CharCycle/",
+  "license": "MIT",
+  "homepage": "https://robincwillis.github.io/CharCycle/",
   "repository": {
     "type": "git",
     "url": "git://github.com/robincwillis/CharCycle.git"
   },
-  "dependencies": {
+  "keywords": [
+    "react",
+    "component",
+    "animation",
+    "text",
+    "cycling",
+    "glitch",
+    "scramble"
+  ],
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   }
 }

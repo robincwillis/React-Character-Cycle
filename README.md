@@ -1,32 +1,86 @@
 CharCycle
-==========
+=========
 
-JQuery plugin to create a cycling effect on selected text at some event.
--------------
+React component to create a character cycling effect on text.
 
-Version Beta 0.0.1
-Updated November 10th, 2011
+Version 1.0.0
 
-###Description
+---
 
-This effect is inspired by the classic actionscript effect on [yugop.com](http://www.yugop.com "Yugop"). Attach the plugin to the element you want to trigger the cycling, specify the target text you want to produce the effect and include a conditional statement to ensure that cycling isn’t re-triggered while the effect is in progress.
+### Description
 
-###Options
+A text scramble / reveal animation inspired by the classic ActionScript effect
+on [yugop.com](http://www.yugop.com). Characters are progressively revealed
+while random glitch characters fill the remaining positions, creating a
+typewriter-meets-glitch aesthetic.
 
-*	speed : time it takes per cycle, default is set to 5
+Originally a jQuery plugin (`jquery.charCycle.0.0.1.js`), now a zero-dependency
+React component built with hooks.
 
-###Project Page
+---
 
-[CharCycle](http://robincwillis.github.io/CharCycle/ "Project Page")
+### Installation
 
-###HTML
+```bash
+npm install charcycle
+```
 
-	<div class="c"><a href="#" id="text">Lorem ipsum dolor sit amet, consectetur</a></div>
+Or copy `src/CharCycle.jsx` directly into your project.
 
-###Javascript
+---
 
-	$('.c').mouseenter(function(){
-    	if($(this).hasClass('cycling')==false){
-        	$(this).charcycle({'target':'#text'});
-    	}
-  	});
+### Usage
+
+```jsx
+import CharCycle from 'charcycle';
+
+// Hover to trigger (default)
+<CharCycle text="Lorem ipsum dolor sit amet" />
+
+// Click to trigger
+<CharCycle text="Click me" trigger="click" />
+
+// Auto-play on mount
+<CharCycle text="Hello world" trigger="auto" />
+
+// Custom speed
+<CharCycle text="Fast reveal" trigger="auto" speed={2} />
+```
+
+---
+
+### Props
+
+| Prop        | Type     | Default    | Description                                      |
+|-------------|----------|------------|--------------------------------------------------|
+| `text`      | string   | `''`       | The text to animate. **Required.**               |
+| `speed`     | number   | `5`        | Initial milliseconds per cycle. Increases by 0.75ms each frame (accelerating reveal). |
+| `trigger`   | string   | `'hover'`  | When to start the animation: `'hover'`, `'click'`, or `'auto'`. |
+| `className` | string   | —          | Additional CSS class(es) applied to the root `<span>`. |
+
+---
+
+### CSS
+
+The component renders a `<span>` with class `charcycle`. While animating it
+also receives the `cycling` class.
+
+```css
+.charcycle         { /* idle state   */ }
+.charcycle.cycling { /* active state */ }
+```
+
+Include `css/charCycle.css` from this repo for the Silkscreen font and demo
+styles, or provide your own.
+
+---
+
+### Project Page
+
+[CharCycle](https://robincwillis.github.io/CharCycle/)
+
+---
+
+### License
+
+MIT — [http://opensource.org/licenses/MIT](http://opensource.org/licenses/MIT)
