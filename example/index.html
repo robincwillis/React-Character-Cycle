@@ -10,12 +10,6 @@
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <link rel="stylesheet" href="../css/charCycle.css">
-
-  <style>
-    body { background-color: #fff; }
-  </style>
 </head>
 
 <body>
@@ -29,7 +23,9 @@
     const QUOTE_PIC2 = "..-_-10?`,abcdefghijklmnopqrstuvwxyz123456789080-~`;' ";
     const QUOTE_PIC3 = "......................................................";
 
-    function CharCycle({ text = '', speed = 5, trigger = 'hover', className }) {
+    const baseStyle = { display: 'inline' };
+
+    function CharCycle({ text = '', speed = 5, trigger = 'hover', style, className }) {
       const [displayText, setDisplayText] = useState(text);
       const [cycling, setCycling]         = useState(false);
       const timerRef  = useRef(null);
@@ -67,19 +63,13 @@
             }
           }
           quoteLoc += 1;
-          if (quoteLoc === quoteLen + 2) {
-            activeRef.current = false;
-            setCycling(false);
-          }
+          if (quoteLoc === quoteLen + 2) { activeRef.current = false; setCycling(false); }
           return quoteDis;
         }
 
         function loopQuote() {
           setDisplayText(disQuote());
-          if (activeRef.current) {
-            timerRef.current = setTimeout(loopQuote, curSpeed);
-            curSpeed += 0.75;
-          }
+          if (activeRef.current) { timerRef.current = setTimeout(loopQuote, curSpeed); curSpeed += 0.75; }
           if (quoteMax < quoteLen) quoteMax += 3;
         }
 
@@ -92,35 +82,47 @@
       if (trigger === 'hover') handlers.onMouseEnter = startCycle;
       else if (trigger === 'click') handlers.onClick = startCycle;
 
-      const classes = ['charcycle', cycling ? 'cycling' : '', className || '']
-        .filter(Boolean).join(' ');
+      const mergedStyle = {
+        ...baseStyle,
+        cursor: trigger === 'click' ? 'pointer' : 'default',
+        ...style,
+      };
 
-      return <span className={classes} {...handlers}>{displayText}</span>;
+      return <span className={className} style={mergedStyle} {...handlers}>{displayText}</span>;
     }
     /* ─────────────────────────────────────────────────────────────── */
+
+    const pageStyle  = { padding: '40px', fontFamily: 'monospace', fontSize: '12px' };
+    const itemStyle  = { margin: '10px 0', padding: '5px', background: '#F8F8FF' };
+    const labelStyle = { fontWeight: 'normal', fontSize: '12px' };
 
     const LOREM = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit';
 
     function App() {
       return (
-        <div>
-          <h3>Hover trigger (default)</h3>
-          <div className="c"><CharCycle text={LOREM} /></div>
-          <div className="c"><CharCycle text={LOREM} /></div>
+        <div style={pageStyle}>
+          <h3 style={labelStyle}>Hover trigger (default)</h3>
+          <div style={itemStyle}><CharCycle text={LOREM} /></div>
+          <div style={itemStyle}><CharCycle text={LOREM} /></div>
 
-          <h3>Click trigger</h3>
-          <div className="c"><CharCycle text={LOREM} trigger="click" className="click-trigger" /></div>
+          <h3 style={labelStyle}>Click trigger</h3>
+          <div style={itemStyle}><CharCycle text={LOREM} trigger="click" /></div>
 
-          <h3>Auto trigger (plays on mount)</h3>
-          <div className="c"><CharCycle text={LOREM} trigger="auto" /></div>
+          <h3 style={labelStyle}>Auto trigger (plays on mount)</h3>
+          <div style={itemStyle}><CharCycle text={LOREM} trigger="auto" /></div>
 
-          <h3>Using a list</h3>
-          <ul>
-            <li className="c"><CharCycle text={LOREM} /></li>
-            <li className="c"><CharCycle text={LOREM} /></li>
+          <h3 style={labelStyle}>Custom style override</h3>
+          <div style={itemStyle}>
+            <CharCycle text={LOREM} style={{ color: '#0055ff', fontStyle: 'italic' }} />
+          </div>
+
+          <h3 style={labelStyle}>Using a list</h3>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            <li style={itemStyle}><CharCycle text={LOREM} /></li>
+            <li style={itemStyle}><CharCycle text={LOREM} /></li>
           </ul>
 
-          <footer>
+          <footer style={{ marginTop: '20px' }}>
             <p>by Robin Willis</p>
           </footer>
         </div>

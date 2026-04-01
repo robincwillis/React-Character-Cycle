@@ -8,32 +8,6 @@
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-  <link rel="stylesheet" href="css/charCycle.css">
-
-  <style>
-    #container { max-width: 800px; }
-    #content   { float: left; width: 60%; }
-    #menu      { float: left; width: 35%; padding-left: 5%; }
-    #footer    { clear: both; margin-top: 20px; }
-    .button    {
-      display: inline-block;
-      margin: 4px 4px 4px 0;
-      padding: 4px 8px;
-      background: #F8F8FF;
-      color: #000;
-      text-decoration: none;
-      border: 1px solid #ccc;
-    }
-    pre {
-      background: #F8F8FF;
-      padding: 10px;
-      overflow-x: auto;
-      font-family: monospace;
-      font-size: 11px;
-    }
-    #demo_cycle { margin-bottom: 20px; }
-  </style>
 </head>
 
 <body>
@@ -47,7 +21,9 @@
     const QUOTE_PIC2 = "..-_-10?`,abcdefghijklmnopqrstuvwxyz123456789080-~`;' ";
     const QUOTE_PIC3 = "......................................................";
 
-    function CharCycle({ text = '', speed = 5, trigger = 'hover', className }) {
+    const baseStyle = { display: 'inline' };
+
+    function CharCycle({ text = '', speed = 5, trigger = 'hover', style, className }) {
       const [displayText, setDisplayText] = useState(text);
       const [cycling, setCycling]         = useState(false);
       const timerRef  = useRef(null);
@@ -85,19 +61,13 @@
             }
           }
           quoteLoc += 1;
-          if (quoteLoc === quoteLen + 2) {
-            activeRef.current = false;
-            setCycling(false);
-          }
+          if (quoteLoc === quoteLen + 2) { activeRef.current = false; setCycling(false); }
           return quoteDis;
         }
 
         function loopQuote() {
           setDisplayText(disQuote());
-          if (activeRef.current) {
-            timerRef.current = setTimeout(loopQuote, curSpeed);
-            curSpeed += 0.75;
-          }
+          if (activeRef.current) { timerRef.current = setTimeout(loopQuote, curSpeed); curSpeed += 0.75; }
           if (quoteMax < quoteLen) quoteMax += 3;
         }
 
@@ -110,96 +80,140 @@
       if (trigger === 'hover') handlers.onMouseEnter = startCycle;
       else if (trigger === 'click') handlers.onClick = startCycle;
 
-      const classes = ['charcycle', cycling ? 'cycling' : '', className || '']
-        .filter(Boolean).join(' ');
+      const mergedStyle = {
+        ...baseStyle,
+        cursor: trigger === 'click' ? 'pointer' : 'default',
+        ...style,
+      };
 
-      return <span className={classes} {...handlers}>{displayText}</span>;
+      return <span className={className} style={mergedStyle} {...handlers}>{displayText}</span>;
     }
     /* ─────────────────────────────────────────────────────────────── */
 
+    const containerStyle = {
+      margin: '10px',
+      padding: '5px',
+      background: '#F8F8FF',
+    };
+
+    const pageStyle = {
+      padding: '40px',
+      fontFamily: 'monospace',
+      fontSize: '12px',
+    };
+
+    const preStyle = {
+      background: '#F8F8FF',
+      padding: '10px',
+      overflowX: 'auto',
+      fontFamily: 'monospace',
+      fontSize: '11px',
+    };
+
+    const menuStyle = {
+      float: 'left',
+      width: '35%',
+      paddingLeft: '5%',
+    };
+
+    const contentStyle = {
+      float: 'left',
+      width: '60%',
+    };
+
+    const buttonStyle = {
+      display: 'inline-block',
+      margin: '4px 4px 4px 0',
+      padding: '4px 8px',
+      background: '#F8F8FF',
+      color: '#000',
+      textDecoration: 'none',
+      border: '1px solid #ccc',
+    };
+
+    const demos = [
+      'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+      'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
+      'Ut enim ad minim veniam',
+      'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
+    ];
+
     function App() {
-      const demos = [
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-        'sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
-        'Ut enim ad minim veniam',
-        'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
-      ];
-
       return (
-        <div id="container">
-          <h1>CharCycle</h1>
-          <h2>A React component to create a cycling effect on selected text at some event.</h2>
+        <div style={pageStyle}>
+          <div style={{ maxWidth: '800px' }}>
+            <h1 style={{ fontWeight: 'normal' }}>CharCycle</h1>
+            <h2 style={{ fontWeight: 'normal' }}>A React component to create a cycling effect on selected text at some event.</h2>
 
-          <div id="content">
-            <div id="header">
-              <div id="demo_cycle">
+            <div style={contentStyle}>
+              <div style={{ marginBottom: '20px' }}>
                 {demos.map((t, i) => (
-                  <div key={i} className="c">
+                  <div key={i} style={containerStyle}>
                     <CharCycle text={t} trigger="hover" />
                   </div>
                 ))}
               </div>
+
+              <div>
+                <h3 style={{ fontWeight: 'normal', fontSize: '12px' }}>Description</h3>
+                <p>
+                  This effect is inspired by the classic ActionScript effect on{' '}
+                  <a href="http://www.yugop.com" style={{ color: '#000' }}>yugop.com</a>.
+                  Hover over the text blocks above to trigger the effect.
+                </p>
+
+                <h3 style={{ fontWeight: 'normal', fontSize: '12px' }}>Props</h3>
+                <ul style={{ listStyle: 'none', padding: 0 }}>
+                  <li><b>text</b>: the string to animate (required)</li>
+                  <li><b>speed</b>: initial ms per cycle, default <code>5</code></li>
+                  <li><b>trigger</b>: <code>'hover'</code> | <code>'click'</code> | <code>'auto'</code>, default <code>'hover'</code></li>
+                  <li><b>style</b>: inline style overrides</li>
+                  <li><b>className</b>: additional CSS class(es)</li>
+                </ul>
+              </div>
             </div>
 
-            <div id="description">
-              <h3>Description</h3>
-              <p>
-                This effect is inspired by the classic ActionScript effect on{' '}
-                <a href="http://www.yugop.com">yugop.com</a>. Hover over the
-                text blocks above to trigger the effect. The component prevents
-                re-triggering while an animation is in progress.
-              </p>
-
-              <h3>Props</h3>
-              <ul>
-                <li><b>text</b>: the string to animate (required)</li>
-                <li><b>speed</b>: initial ms per cycle, default <code>5</code></li>
-                <li><b>trigger</b>: <code>'hover'</code> | <code>'click'</code> | <code>'auto'</code>, default <code>'hover'</code></li>
-                <li><b>className</b>: additional CSS class(es)</li>
-              </ul>
+            <div style={menuStyle}>
+              Version 1.0.0<br />
+              Updated March 2026<br /><br />
+              Have questions or found a bug?{' '}
+              <a href="https://github.com/robincwillis/CharCycle/issues" target="_blank" rel="noreferrer" style={{ color: '#000' }}>
+                Open an Issue on GitHub
+              </a><br /><br />
+              <a style={buttonStyle} href="src/CharCycle.jsx" target="_blank">Download</a>
+              <a style={buttonStyle} href="example/index.html" target="_blank">Demo</a>
+              <a style={buttonStyle} href="https://github.com/robincwillis/CharCycle" target="_blank">Source</a>
             </div>
-          </div>
 
-          <div id="menu">
-            Version 1.0.0<br />
-            Updated March 2026<br /><br />
-            Have questions or found a bug?{' '}
-            <a href="https://github.com/robincwillis/CharCycle/issues" target="_blank" rel="noreferrer">
-              Open an Issue on GitHub
-            </a><br /><br />
-            <a className="button" href="src/CharCycle.jsx" target="_blank">Download</a>
-            <a className="button" href="example/index.html" target="_blank">Demo</a>
-            <a className="button" href="https://github.com/robincwillis/CharCycle" target="_blank">Source</a>
-          </div>
+            <div style={{ clear: 'both' }} />
 
-          <div style={{ clear: 'both' }} />
-
-          <div id="code_jsx">
-            <h2>JSX</h2>
-            <pre>{`import CharCycle from 'charcycle';
+            <div>
+              <h2 style={{ fontWeight: 'normal' }}>JSX</h2>
+              <pre style={preStyle}>{`import { CharCycle } from 'charcycle';
 
 <CharCycle text="Lorem ipsum dolor sit amet" />`}</pre>
-          </div>
+            </div>
 
-          <div id="code_click">
-            <h2>Click trigger</h2>
-            <pre>{`<CharCycle text="Click me" trigger="click" />`}</pre>
-          </div>
+            <div>
+              <h2 style={{ fontWeight: 'normal' }}>Click trigger</h2>
+              <pre style={preStyle}>{`<CharCycle text="Click me" trigger="click" />`}</pre>
+            </div>
 
-          <div id="code_auto">
-            <h2>Auto trigger (plays on mount)</h2>
-            <pre>{`<CharCycle text="Hello world" trigger="auto" speed={3} />`}</pre>
-          </div>
+            <div>
+              <h2 style={{ fontWeight: 'normal' }}>Auto trigger (plays on mount)</h2>
+              <pre style={preStyle}>{`<CharCycle text="Hello world" trigger="auto" speed={3} />`}</pre>
+            </div>
 
-          <div id="footer">
-            Check out my other projects at{' '}
-            <a href="http://code.robincwillis.com" target="_blank" rel="noreferrer">
-              code.robincwillis.com
-            </a>{' '}
-            or find me on{' '}
-            <a href="https://twitter.com/robincwillis" target="_blank" rel="noreferrer">
-              Twitter
-            </a>.
+            <div style={{ marginTop: '20px' }}>
+              Check out my other projects at{' '}
+              <a href="http://code.robincwillis.com" target="_blank" rel="noreferrer" style={{ color: '#000' }}>
+                code.robincwillis.com
+              </a>{' '}
+              or find me on{' '}
+              <a href="https://twitter.com/robincwillis" target="_blank" rel="noreferrer" style={{ color: '#000' }}>
+                Twitter
+              </a>.
+            </div>
           </div>
         </div>
       );
