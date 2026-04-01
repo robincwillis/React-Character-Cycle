@@ -58,22 +58,18 @@ import { CharCycle } from 'charcycle';
 | `text`      | string   | `''`       | The text to animate. **Required.**               |
 | `speed`     | number   | `5`        | Initial milliseconds per cycle. Increases by 0.75ms each frame (accelerating reveal). |
 | `trigger`   | string   | `'hover'`  | When to start the animation: `'hover'`, `'click'`, or `'auto'`. |
+| `style`     | object   | —          | Inline style overrides merged onto the root `<span>`. |
 | `className` | string   | —          | Additional CSS class(es) applied to the root `<span>`. |
 
----
+The component ships with no external CSS. Styles are applied inline — `cursor: pointer`
+for click-triggered instances, `cursor: default` otherwise. Override via the `style` prop:
 
-### CSS
-
-The component renders a `<span>` with class `charcycle`. While animating it
-also receives the `cycling` class.
-
-```css
-.charcycle         { /* idle state   */ }
-.charcycle.cycling { /* active state */ }
+```jsx
+<CharCycle
+  text="Styled text"
+  style={{ color: '#0055ff', fontFamily: 'monospace', fontSize: '14px' }}
+/>
 ```
-
-Include `css/charCycle.css` from this repo for the Silkscreen font and demo
-styles, or provide your own.
 
 ---
 

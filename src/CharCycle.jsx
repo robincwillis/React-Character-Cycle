@@ -14,6 +14,10 @@ const QUOTE_PIC  = "....fgh......_____----hr--~`;'--~/--- ---asd----10?`, ";
 const QUOTE_PIC2 = "..-_-10?`,abcdefghijklmnopqrstuvwxyz123456789080-~`;' ";
 const QUOTE_PIC3 = "......................................................";
 
+const baseStyle = {
+  display: 'inline',
+};
+
 /**
  * CharCycle component
  *
@@ -21,19 +25,18 @@ const QUOTE_PIC3 = "......................................................";
  *   text      {string}  Text to animate. Required.
  *   speed     {number}  Initial ms per cycle. Default: 5.
  *   trigger   {string}  'hover' | 'click' | 'auto'. Default: 'hover'.
+ *   style     {object}  Inline style overrides merged onto the root element.
  *   className {string}  Additional CSS class(es) for the root element.
  */
-function CharCycle({ text = '', speed = 5, trigger = 'hover', className }) {
+function CharCycle({ text = '', speed = 5, trigger = 'hover', style, className }) {
   const [displayText, setDisplayText] = useState(text);
   const [cycling, setCycling] = useState(false);
   const timerRef  = useRef(null);
-  const activeRef = useRef(false); // tracks in-flight animation without stale closure issues
+  const activeRef = useRef(false);
 
   // Sync display text when the text prop changes while idle
   useEffect(() => {
-    if (!activeRef.current) {
-      setDisplayText(text);
-    }
+    if (!activeRef.current) setDisplayText(text);
   }, [text]);
 
   // Cleanup on unmount
@@ -55,7 +58,6 @@ function CharCycle({ text = '', speed = 5, trigger = 'hover', className }) {
     let   curSpeed  = speed;
     let   quoteStr  = text;
 
-    // Pad to quoteMax (mirrors padQuote from the original plugin)
     while (quoteStr.length < quoteMax) quoteStr += ' ';
 
     function disQuote() {
@@ -84,15 +86,13 @@ function CharCycle({ text = '', speed = 5, trigger = 'hover', className }) {
     }
 
     function loopQuote() {
-      const display = disQuote();
-      setDisplayText(display);
+      setDisplayText(disQuote());
 
       if (activeRef.current) {
         timerRef.current = setTimeout(loopQuote, curSpeed);
         curSpeed += 0.75;
       }
 
-      // quoteMax expansion (mirrors original; only fires if quoteMax < quoteLen)
       if (quoteMax < quoteLen) quoteMax += 3;
     }
 
@@ -111,12 +111,18 @@ function CharCycle({ text = '', speed = 5, trigger = 'hover', className }) {
     eventHandlers.onClick = startCycle;
   }
 
-  const classes = ['charcycle', cycling ? 'cycling' : '', className || '']
-    .filter(Boolean)
-    .join(' ');
+  const mergedStyle = {
+    ...baseStyle,
+    cursor: trigger === 'click' ? 'pointer' : 'default',
+    ...style,
+  };
 
   return (
-    <span className={classes} {...eventHandlers}>
+    <span
+      className={className}
+      style={mergedStyle}
+      {...eventHandlers}
+    >
       {displayText}
     </span>
   );

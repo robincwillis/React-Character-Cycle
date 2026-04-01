@@ -25,13 +25,12 @@
     ".": {
       "import": "./dist/charcycle.es.js",
       "require": "./dist/charcycle.cjs.js"
-    },
-    "./css": "./css/charCycle.css"
+    }
   },
   "files": [
     "dist",
-    "css",
-    "src"
+    "src/CharCycle.jsx",
+    "src/index.js"
   ],
   "sideEffects": false,
   "scripts": {

@@ -2,6 +2,9 @@
 index.html
 example/
 
+# External styles (component uses inline styles only)
+css/
+
 # Build tooling
 vite.config.js
 .gitignore
